@@ -192,12 +192,28 @@ export default function EmailCaptureStep(props) {
                 if (window.dataLayer) {
                     window.dataLayer.push({
                         event: "generate_lead",
+                        ecommerce: {
+                            currency: "USD",
+                            value: 0.0,
+                            items: [
+                                {
+                                    item_id: "email_signup",
+                                    item_name: "Newsletter Signup",
+                                    item_category: "lead",
+                                    quantity: 1,
+                                },
+                            ],
+                        },
                         lead_details: {
                             email: email.trim(),
                             locale: locale,
                             source: "email_capture_step",
                             status: result.status,
                             has_fbclid: !!fbclid,
+                        },
+                        user_data: {
+                            email: email.trim(),
+                            email_address: email.trim(),
                         },
                     })
                 }
