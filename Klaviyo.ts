@@ -363,28 +363,33 @@ function KlaviyoSignup({
                 )
             } catch (fetchError) {
                 clearTimeout(timeoutId)
-                
+
                 // Better error handling based on error type
                 let errorMessage = "Signup failed. Please try again."
                 let errorDetails = {
                     error: fetchError.message,
                     name: fetchError.name,
-                    isOnline: navigator.onLine
+                    isOnline: navigator.onLine,
                 }
-                
+
                 if (fetchError.name === "AbortError") {
-                    errorMessage = "Request timed out. Please check your connection and try again."
+                    errorMessage =
+                        "Request timed out. Please check your connection and try again."
                     errorDetails.timeout = true
                 } else if (!navigator.onLine) {
-                    errorMessage = "No internet connection. Please check your connection and try again."
+                    errorMessage =
+                        "No internet connection. Please check your connection and try again."
                     errorDetails.offline = true
-                } else if (fetchError.message.includes("Failed to fetch") || 
-                          fetchError.message.includes("NetworkError") || 
-                          fetchError.message.includes("fetch")) {
-                    errorMessage = "Connection failed. This might be due to an ad blocker or privacy extension. Please try disabling them for this site."
+                } else if (
+                    fetchError.message.includes("Failed to fetch") ||
+                    fetchError.message.includes("NetworkError") ||
+                    fetchError.message.includes("fetch")
+                ) {
+                    errorMessage =
+                        "Connection failed. This might be due to an ad blocker or privacy extension. Please try disabling them for this site."
                     errorDetails.possibleBlocker = true
                 }
-                
+
                 addSentryBreadcrumb(
                     "Fetch failed, trying fallback",
                     errorDetails,
@@ -441,21 +446,7 @@ function KlaviyoSignup({
                 ) {
                     try {
                         // Email signup event
-                        window.dataLayer.push({
-                            event: "email_signup",
-                            user_data: {
-                                email: trimmedEmail,
-                                language: lang,
-                                list_id: listId,
-                            },
-                            event_context: {
-                                page_url: window.location?.href || "",
-                                page_path: window.location?.pathname || "",
-                                user_agent: navigator?.userAgent || "",
-                            },
-                        })
-
-                        // Lead event for Meta
+                        // Only push one event for the signup
                         window.dataLayer.push({
                             event: "generate_lead",
                             ecommerce: {
@@ -479,6 +470,11 @@ function KlaviyoSignup({
                             user_data: {
                                 email: trimmedEmail,
                                 email_address: trimmedEmail,
+                            },
+                            event_context: {
+                                page_url: window.location?.href || "",
+                                page_path: window.location?.pathname || "",
+                                user_agent: navigator?.userAgent || "",
                             },
                         })
                     } catch (gtmError) {
