@@ -7,11 +7,11 @@ const BACKEND_URL = "https://ce-stripe-upsell-form-3iw4kbqopa-uc.a.run.app"
 
 // PERFORMANCE: Preload Stripe.js
 if (typeof window !== "undefined") {
-    const link = document.createElement('link');
-    link.rel = 'preload';
-    link.as = 'script';
-    link.href = 'https://js.stripe.com/v3/';
-    document.head.appendChild(link);
+    const link = document.createElement("link")
+    link.rel = "preload"
+    link.as = "script"
+    link.href = "https://js.stripe.com/v3/"
+    document.head.appendChild(link)
 }
 
 // --- Helpers ---
@@ -198,7 +198,8 @@ export default function UpsellStripeCheckout({ email = "", isEnabled = true }) {
                                         value: 20.0,
                                         items: [
                                             {
-                                                item_id: "captain_english_upsell",
+                                                item_id:
+                                                    "captain_english_upsell",
                                                 item_name:
                                                     "Captain English Upsell Package",
                                                 price: 20.0,
@@ -241,7 +242,7 @@ export default function UpsellStripeCheckout({ email = "", isEnabled = true }) {
             },
             {
                 threshold: 0.5,
-                rootMargin: '50px'
+                rootMargin: "50px",
             }
         )
 
