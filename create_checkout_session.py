@@ -100,6 +100,7 @@ def create_checkout_session(request):
     try:
         data = request.get_json(silent=True) or {}
         email = data.get("email")
+        # TODO: Return error if email is not provided
         action = data.get("action", "checkout")
         funnel_type = data.get("funnel_type", "option_b")
         
@@ -187,6 +188,7 @@ def create_checkout_session(request):
             "metadata": {
                 "funnel_type": funnel_type,
                 "locale": locale,
+                "email": email,
                 "fbc": metadata.get('fbc', ''),  # Facebook Click ID
                 "fbp": metadata.get('fbp', ''),  # Facebook Browser ID
                 "client_ip": client_ip,  # IP Address for Meta
