@@ -9,6 +9,12 @@ logging.basicConfig(level=logging.INFO)
 @functions_framework.http
 def create_checkout_session(request):
     stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
+    
+    # Validate required environment variables
+    STRIPE_UPSELL_PRICE_ID = os.environ.get("STRIPE_UPSELL_PRICE_ID")
+    if not STRIPE_UPSELL_PRICE_ID:
+        logging.error("STRIPE_UPSELL_PRICE_ID environment variable is not set")
+        return (jsonify({'error': 'Server configuration error'}), 500, {'Access-Control-Allow-Origin': '*'})
 
     if request.method == 'OPTIONS':
         headers = {
@@ -108,7 +114,7 @@ def create_checkout_session(request):
 
         # Build session data
         session_data = {
-            "line_items": [{"price": "price_1RihzWLm9s3Kr237zZAbjOio", "quantity": 1}],
+            "line_items": [{"price": STRIPE_UPSELL_PRICE_ID, "quantity": 1}],
             "mode": "payment",
             "ui_mode": "embedded",
             "return_url": SUCCESS_REDIRECT_URL,
